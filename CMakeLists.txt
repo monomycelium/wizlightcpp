@@ -1,10 +1,11 @@
-cmake_minimum_required(VERSION 3.0.0)
-project(wizlightcpp VERSION 1.0.0)
+cmake_minimum_required(VERSION 3.14)
+project(ciz VERSION 1.0.0)
 
-SET(GCC_COVERAGE_COMPILE_FLAGS "-Werror -Wall -std=c++17")
-SET(CMAKE_CXX_FLAGS  "${GCC_COVERAGE_COMPILE_FLAGS}")
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/thirdparty)
+#SET(GCC_COVERAGE_COMPILE_FLAGS "-Werror -Wall -std=c++17")
+#SET(CMAKE_CXX_FLAGS  "${GCC_COVERAGE_COMPILE_FLAGS}")
 
 add_executable(${PROJECT_NAME} 
     ${CMAKE_SOURCE_DIR}/src/wizcontrol.cpp
@@ -17,12 +18,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/include
 )
 
-# Jansson JSON library
-find_package(Jansson REQUIRED) 
-target_link_libraries(${PROJECT_NAME}
-    jansson
-)
-
-set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-include(CPack)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(JANSSON REQUIRED IMPORTED_TARGET jansson)
+target_link_libraries(ciz PUBLIC PkgConfig::JANSSON)
